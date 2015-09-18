@@ -3,34 +3,37 @@ require('babel/register');
 var fs         = require('fs'),
     mysql      = require('mysql'),
     SFTPServer = require('./lib/SFTPServer'),
-    adapter    = require('./lib/adapter/Filesystem'),
-    //adapter    = require('./lib/adapter/Database'),
-    db         = require('./lib/database/MySQL'),
-    dbConn     = new db(JSON.parse(fs.readFileSync('./db_config.json', 'utf8'))), // { "database" : "", "host" : "", "password" : "", "user" : "" }
-    endDBConn  = function() {
-        dbConn.disconnect();
+    onShutdown = function() {
+        server.destroy();
 
         process.exit(0);
     };
 
-dbConn.connect();
-
-process.on('SIGINT',  endDBConn);
-process.on('SIGTERM', endDBConn);
-process.on('SIGHUP',  endDBConn);
-
-//for simple example, this is only needed for Filesystem adapter
-adapter.setFilenameParser(function(filename) {
-    return __dirname + '/fileforyou.txt';
-});
+process.on('SIGINT',  onShutdown);
+process.on('SIGTERM', onShutdown);
+process.on('SIGHUP',  onShutdown);
 
 var server = new SFTPServer({
-    keyAdapter   : require('./lib/key/Database'),
-    adapter      : adapter,
     debug        : console.log,
-    dbConnection : dbConn,
     port         : 3333,
-    privateKey   : __dirname + '/keys/host_rsa'
+    privateKey   : __dirname + '/keys/host_rsa',
+
+    dbAdapter   : require('./lib/database/MySQL'),
+    fileAdapter : require('./lib/adapter/Filesystem'),
+    //fileAdapter : require('./lib/adapter/Database'),
+    keyAdapter  : require('./lib/key/Database'),
+
+    dbConfig    : JSON.parse(fs.readFileSync('./db_config.json', 'utf8')),
+
+    fileConfig  : {
+        filenameParser : function(filename) {
+            if (this.type === 'filesystem') {
+                return __dirname + '/fileforyou.txt';
+            } else {
+                return filename;
+            }
+        }
+    }
 });
 
 server.init();
