@@ -36,3 +36,35 @@ You need to create a host RSA key. Via CLI, run this command:
     ssh-keygen -t rsa
 
 I save the key in the `keys/host_rsa` file in this project.
+
+For MySQL tables, I use these three:
+
+    CREATE TABLE `user_public_keys` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `username` varchar(200) NOT NULL,
+        `name` varchar(25) NOT NULL,
+        `key` text NOT NULL,
+        `added` datetime NOT NULL,
+        PRIMARY KEY (`id`)
+    );
+
+    CREATE TABLE `user_files` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `name` VARCHAR(255) NOT NULL,
+        `data` LONGTEXT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE INDEX `name_UNIQUE` (`name` ASC)
+    );
+
+    CREATE TABLE `user_files_stats` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `file_id` INT NOT NULL,
+        `uid` INT NOT NULL,
+        `gid` INT NOT NULL,
+        `mode` INT NOT NULL,
+        `size` INT NOT NULL,
+        `atime` DATETIME NOT NULL,
+        `mtime` DATETIME NOT NULL,
+        `ctime` DATETIME NOT NULL,
+        PRIMARY KEY (`id`)
+    );
