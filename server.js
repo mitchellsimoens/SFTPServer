@@ -25,6 +25,7 @@ adapter.setFilenameParser(function(filename) {
 });
 
 var server = new SFTPServer({
+    keyAdapter   : require('./lib/key/Database'),
     adapter      : adapter,
     debug        : console.log,
     dbConnection : dbConn,
