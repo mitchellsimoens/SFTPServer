@@ -1,16 +1,12 @@
 require('babel/register');
 
-var mysql      = require('mysql'),
+var fs         = require('fs'),
+    mysql      = require('mysql'),
     SFTPServer = require('./lib/SFTPServer'),
     adapter    = require('./lib/adapter/Filesystem'),
     //adapter    = require('./lib/adapter/Database'),
     db         = require('./lib/database/MySQL'),
-    dbConn     = new db({
-        database : '',
-        host     : '',
-        password : '',
-        user     : ''
-    }),
+    dbConn     = new db(JSON.parse(fs.readFileSync('./db_config.json', 'utf8'))), // { "database" : "", "host" : "", "password" : "", "user" : "" }
     endDBConn  = function() {
         dbConn.disconnect();
 
