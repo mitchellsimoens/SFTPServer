@@ -1,0 +1,18 @@
+{
+  "name": "ssh_server",
+  "version": "1.0.0",
+  "description": "An example ssh2 sftp server.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mitchell Simoens <mitchellsimoens@gmail.com> (https://mitchellsimoens.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "buffer-equal-constant-time": "^1.0.1",
+    "mysql": "^2.9.0",
+    "ssh2": "^0.4.11",
+    "ssh2-streams": "0.0.17"
+  }
+}
