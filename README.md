@@ -68,3 +68,14 @@ For MySQL tables, I use these three:
         `ctime` DATETIME NOT NULL,
         PRIMARY KEY (`id`)
     );
+
+TODO
+===
+
+ - Upload file
+ - Read directory
+ - other sftp operations
+ - MongoDB db adapter
+ - S3 file adapter
+ - Filesystem key adapter
+ - S3 key adapter
